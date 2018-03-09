@@ -3,7 +3,7 @@ SHELL_VENV_INSTALL_POINT="/usr/local/bin"
 declare -a SHELL_VENV_COMMAND_NAMES=()
 
 # Find all directories in the shell-venv-commands directory and source key files in those directories
-for command_name in $SHELL_VENV_COMMAND_NAMES; do
+for command_name in ${SHELL_VENV_COMMAND_NAMES[@]}; do
 	command_path=${SHELL_VENV_INSTALL_POINT}/shell-venv-commands/${command_name}
 	source $command_path/$command_name.sh
 	source $command_path/${command_name}_completion.sh
@@ -39,3 +39,15 @@ function shell-venv {
 		return 1
 	fi
 }
+
+# Tab completion for shell-venv command
+function _shell-venv-completions {
+	if [ $COMP_CWORD -ne 1 ]; then
+		return 0
+	fi
+
+	COMPREPLY=($(compgen -W "${SHELL_VENV_COMMAND_NAMES[*]}" "${COMP_WORDS[1]}"))
+}
+
+# Set tab completion script
+complete -F _shell-venv-completions shell-venv
