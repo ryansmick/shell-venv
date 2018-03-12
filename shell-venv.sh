@@ -1,6 +1,6 @@
 SHELL_VENV_INSTALL_POINT="/usr/local/bin"
 
-declare -a SHELL_VENV_COMMAND_NAMES=()
+declare -a SHELL_VENV_COMMAND_NAMES=( list )
 
 # Find all directories in the shell-venv-commands directory and source key files in those directories
 for command_name in ${SHELL_VENV_COMMAND_NAMES[@]}; do
@@ -38,6 +38,10 @@ function shell-venv {
 		echo "Error: \"$1\" is not a valid command"
 		return 1
 	fi
+
+	if [ $1 == "list" ]; then
+		shell-venv-list ${@:2}
+	fi
 }
 
 # Tab completion for shell-venv command
@@ -51,3 +55,8 @@ function _shell-venv-completions {
 
 # Set tab completion script
 complete -F _shell-venv-completions shell-venv
+
+# Set home directory if not previously set
+home_dir=${SHELL_VENV_HOME:="${HOME}/.shell-venv-home"}
+mkdir -p "$home_dir"
+echo "Environment home set to $home_dir"
