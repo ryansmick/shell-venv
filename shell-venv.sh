@@ -1,6 +1,6 @@
 SHELL_VENV_INSTALL_POINT="/usr/local/bin"
 
-declare -a SHELL_VENV_COMMAND_NAMES=( list )
+declare -a SHELL_VENV_COMMAND_NAMES=( init list )
 
 # Find all directories in the shell-venv-commands directory and source key files in those directories
 for command_name in ${SHELL_VENV_COMMAND_NAMES[@]}; do
@@ -40,7 +40,11 @@ function shell-venv {
 	fi
 
 	if [ $1 == "list" ]; then
-		shell-venv-list ${@:2}
+		shell-venv-list "${@:2}"
+	fi
+
+	if [ $1 == "init" ]; then
+		shell-venv-init "${@:2}"
 	fi
 }
 
